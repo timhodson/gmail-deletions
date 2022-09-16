@@ -12,6 +12,7 @@ from googleapiclient.errors import HttpError
 # SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 SCOPES = ['https://mail.google.com/']
 
+credentials_file = '/Users/timhodson/Documents/client_secret_14606609586-u229ommum45s662toqjpnhmkjj0b07sj.apps.googleusercontent.com.json'
 
 def main():
     """Shows basic usage of the Gmail API.
@@ -29,7 +30,7 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                '/Users/timhodson/Documents/client_secret_14606609586-u229ommum45s662toqjpnhmkjj0b07sj.apps.googleusercontent.com.json', SCOPES)
+                credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:

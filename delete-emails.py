@@ -11,6 +11,8 @@ from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://mail.google.com/']
+credentials_file = '/Users/timhodson/Documents/client_secret_14606609586-u229ommum45s662toqjpnhmkjj0b07sj.apps.googleusercontent.com.json'
+label_id = 'Label_2'
 
 def log_message(message):
     # log message showing elapsed time since last log message
@@ -34,7 +36,7 @@ def main():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                '/Users/timhodson/Documents/client_secret_14606609586-u229ommum45s662toqjpnhmkjj0b07sj.apps.googleusercontent.com.json', SCOPES)
+                credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
@@ -48,7 +50,7 @@ def main():
         # The label I am interested in has an id 'Label_2'
         # I got this by running the 'quickstart.py' script and looking at the output.
         # 500 seems to be the maximum we can get at once
-        request = service.users().messages().list(userId='me', labelIds='Label_2', maxResults=500)
+        request = service.users().messages().list(userId='me', labelIds=label_id, maxResults=500)
         results = request.execute()
         messages = results.get('messages', [])
 
@@ -86,7 +88,7 @@ def main():
             deletion_body = {'ids': chunk}
             # print("{}".format(chunk))
             log_message("Deleting messages...{}:{}".format(idx,len(chunk)))
-            service.users().messages().batchDelete(userId='me', body=deletion_body).execute()
+            # service.users().messages().batchDelete(userId='me', body=deletion_body).execute()
 
     except HttpError as error:
         # TODO(developer) - Handle errors from gmail API.
